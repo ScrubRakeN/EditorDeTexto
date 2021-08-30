@@ -8,10 +8,10 @@ public class textEditor extends JFrame {
 	private JLabel label1, label2;
 	private JButton btGravar, btAbrir, btLimpar, btAumentar, btDiminuir, btNegrito, btItalico, btVolta;
 	private JTextField tfTexto;
-	private TextArea taTexto;
+	private JTextArea taTexto;
 	private FileDialog fdAbrir, fdSalvar;
 	private String nome_do_arquivo;
-
+	private JScrollPane scrollText;
 	private Container c1;
 	private JMenuBar mnBarra;
 	private JMenu mnArquivo, mnFontes, mnCorTexto;
@@ -21,11 +21,11 @@ public class textEditor extends JFrame {
 	
 	private String fonte="Verdana";
 
-	private int tamOF = 12, n;
+	private int tamOF = 12;
 	
 	public static void main(String args[]) {
 		JFrame frame = new textEditor();
-//		frame.setResizable(false);
+		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -66,15 +66,19 @@ public class textEditor extends JFrame {
 		tfTexto = new JTextField();
 		tfTexto.setBounds(50, 240, 430, 20);
 		tfTexto.setEditable(false);
-		taTexto = new TextArea();
-		taTexto.setBounds(5, 25, 480, 180);
+		taTexto = new JTextArea();
+		taTexto.setLineWrap(true);
+		taTexto.setWrapStyleWord(true);
+		scrollText = new JScrollPane(taTexto);
+		scrollText.setBounds(5, 25, 480, 180);
+		scrollText.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		fdAbrir = new FileDialog(this, "Abrir arquivo", FileDialog.LOAD);
 		fdSalvar = new FileDialog(this, "Salvar arquivo", FileDialog.SAVE);
 
 		add(label1);
 		add(label2);
 		add(tfTexto);
-		add(taTexto);
+		add(scrollText);
 		add(btLimpar);
 		add(btAumentar);
 		add(btDiminuir);
@@ -199,7 +203,7 @@ public class textEditor extends JFrame {
 				fonte="Arial";
 				System.out.println("fonte:"+fonte);	
 				UIManager.put("Label.font", fonte);
-				taTexto.setFont(new Font(fonte, n, tamOF));
+				taTexto.setFont(new Font(fonte, taTexto.getFont().getStyle(), tamOF));
 				return;
 			}
 		});
@@ -208,7 +212,7 @@ public class textEditor extends JFrame {
 				fonte="Times new Roman";
 				System.out.println("fonte:"+fonte);	
 				UIManager.put("Label.font", fonte);
-				taTexto.setFont(new Font(fonte, n, tamOF));
+				taTexto.setFont(new Font(fonte, taTexto.getFont().getStyle(), tamOF));
 				return;
 			}
 		});
@@ -217,7 +221,7 @@ public class textEditor extends JFrame {
 				fonte="Courier New";
 				System.out.println("fonte:"+fonte);	
 				UIManager.put("Label.font", fonte);
-				taTexto.setFont(new Font(fonte, n, tamOF));
+				taTexto.setFont(new Font(fonte, taTexto.getFont().getStyle(), tamOF));
 				return;
 			}
 		});
@@ -228,7 +232,7 @@ public class textEditor extends JFrame {
 					if (tamOF>96) {
 						tamOF=96;
 					}
-					taTexto.setFont(new Font(fonte, n, tamOF));
+					taTexto.setFont(new Font(fonte, taTexto.getFont().getStyle(), tamOF));
 					System.out.println("tamanho:"+tamOF);					
 					return;
 					}
@@ -241,7 +245,7 @@ public class textEditor extends JFrame {
 					if (tamOF <12) {
 						tamOF=12;
 					}
-					taTexto.setFont(new Font(fonte, n, tamOF));
+					taTexto.setFont(new Font(fonte, taTexto.getFont().getStyle(), tamOF));
 					System.out.println("tamanho:"+tamOF);
 					return;
 				}
@@ -249,21 +253,42 @@ public class textEditor extends JFrame {
 		});
 		btNegrito.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				n = 1;
-				taTexto.setFont(new Font(fonte, n, tamOF));
+				
+				int fontStyle = taTexto.getFont().getStyle();
+				
+				if(fontStyle == Font.BOLD) {
+					
+					taTexto.setFont(new Font(fonte, Font.PLAIN, tamOF));
+					
+				}else {
+					
+					taTexto.setFont(new Font(fonte, Font.BOLD, tamOF));
+				}
+				
+					
 			}
 		});
 		btItalico.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				n = 2;
-					taTexto.setFont(new Font(fonte, n, tamOF));
 
+				int fontStyle = taTexto.getFont().getStyle();
+				
+				if(fontStyle == Font.ITALIC) {
+					
+					taTexto.setFont(new Font(fonte, Font.PLAIN, tamOF));
+					
+				}else {
+					
+					taTexto.setFont(new Font(fonte, Font.ITALIC, tamOF));
+				}
+				
 			}
 		});
 		btVolta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				n = 0;
-					taTexto.setFont(new Font(fonte, n, tamOF));		
+					
+				taTexto.setFont(new Font(fonte, Font.PLAIN, tamOF));
+					
 			}
 		});
 
